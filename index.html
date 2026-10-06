@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebFlowy | Web Design & Development Agency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.75);
+            --bg-card-hover: rgba(255, 255, 255, 0.95);
+            --gray-dark: #1e293b;
+            --gray-medium: #64748b;
+            --gray-light: #e2e8f0;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #0284c7;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --shadow-subtle: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 40px -15px rgba(6, 182, 212, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--gray-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* WATER BUBBLES ANIMATION CONTAINER */
+        .bubbles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(6, 182, 212, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(0, 0, 0, 0.03);
+            animation: floatUp 12s infinite ease-in-out;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Individual bubble dimensions and positions */
+        .bubble:nth-child(1) { width: 60px; height: 60px; left: 10%; animation-duration: 10s; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 35px; height: 35px; left: 25%; animation-duration: 14s; animation-delay: 2s; }
+        .bubble:nth-child(3) { width: 80px; height: 80px; left: 40%; animation-duration: 11s; animation-delay: 4s; }
+        .bubble:nth-child(4) { width: 45px; height: 45px; left: 65%; animation-duration: 13s; animation-delay: 1s; }
+        .bubble:nth-child(5) { width: 70px; height: 70px; left: 80%; animation-duration: 15s; animation-delay: 3s; }
+        .bubble:nth-child(6) { width: 25px; height: 25px; left: 90%; animation-duration: 9s; animation-delay: 5s; }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            background: rgba(248, 250, 252, 0.8);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            backdrop-filter: blur(16px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gray-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-cyan);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--gray-medium);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gray-dark);
+        }
+
+        .btn-nav {
+            background: var(--gray-dark);
+            color: #fff !important;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(6, 182, 212, 0.3);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 20px 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--gray-medium);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-subtle);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 3.4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            color: var(--gray-dark);
+            max-width: 850px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--gray-dark) 0%, var(--gray-medium) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--gray-medium);
+            max-width: 600px;
+            margin-bottom: 35px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .btn-primary {
+            background: var(--gray-dark);
+            color: #fff;
+            padding: 14px 30px;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.15);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--gray-dark);
+            padding: 14px 30px;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            border-color: var(--gray-medium);
+        }
+
+        /* SERVICES */
+        .services {
+            padding: 90px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--gray-dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: var(--gray-medium);
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-subtle);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-dark);
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--gray-medium);
+            font-size: 0.95rem;
+        }
+
+        /* BOOKING FORM */
+        .booking-section {
+            padding: 90px 8%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .booking-container {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03);
+            backdrop-filter: blur(16px);
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+        }
+
+        .btn-submit {
+            background: var(--gray-dark);
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.15);
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .status-message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* FOOTER & TEAM */
+        footer {
+            padding: 60px 8% 30px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand p {
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .team-box h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-dark);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 35px;
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .team-role {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .team-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--gray-medium);
+        }
+
+        /* ANIMATIONS */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-1200px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 15px 5%; }
+            .hero h1 { font-size: 2.2rem; }
+            .footer-content { flex-direction: column; }
+            .team-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WATER BUBBLES ANIMATION -->
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">Web<span>Flowy</span></div>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#booking" class="btn-nav">Schedule a Call</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">Adaptive Web Development</div>
+        <h1>Your professional website, <br><span class="highlight">tailored to your budget.</span></h1>
+        <p>We develop modern, clean, and fast web platforms. The right solution tailored to your financial needs and expectations.</p>
+        <div class="hero-buttons">
+            <a href="#booking" class="btn-primary">Book a Meeting</a>
+            <a href="#services" class="btn-secondary">View Services</a>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="services">
+        <div class="section-title">
+            <h2>Our Services</h2>
+            <p>Clean and elegant solutions for your business.</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Presentation Websites</h3>
+                <p>Modern, sleek, and fast design engineered to make the best impression on your clients.</p>
+            </div>
+            <div class="service-card">
+                <h3>E-Commerce Stores</h3>
+                <p>Secure, user-friendly online store platforms that are easy to manage.</p>
+            </div>
+            <div class="service-card">
+                <h3>Custom Development</h3>
+                <p>Tailor-made projects built from scratch to meet your exact specifications.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING FORM -->
+    <section id="booking" class="booking-section">
+        <div class="booking-container">
+            <div class="section-title" style="margin-bottom: 20px;">
+                <h2>Schedule a Meeting</h2>
+                <p>Find the right solution for you in just a few minutes.</p>
+            </div>
+
+            <form id="bookingForm" class="booking-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="E.g., John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+1 234 567 890" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Estimated Budget</label>
+                    <select id="budget" required>
+                        <option value="" disabled selected>Select budget range</option>
+                        <option value="150-300">Starter (€150 - €300)</option>
+                        <option value="300-600">Business (€300 - €600)</option>
+                        <option value="600-1200">Premium / Store (€600 - €1200)</option>
+                        <option value="1200+">Custom (> €1200)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Preferred Meeting Date</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Request</button>
+            </form>
+
+            <div id="formStatus" class="status-message"></div>
+        </div>
+    </section>
+
+    <!-- FOOTER WITH TEAM -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">Web<span>Flowy</span></div>
+                <p>Web design and development services tailored to your budget.</p>
+            </div>
+
+            <div class="team-box">
+                <h4>WebFlowy Team</h4>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <span class="team-role">Founder / CEO</span>
+                        <span class="team-name">Cocier Cătălin</span>
+                    </div>
+                    <div class="team-member">
+                        <span class="team-role">Manager</span>
+                        <span class="team-name">Apopi Robert</span>
+                    </div>
+                    <div class="team-member">
+                        <span class="team-role">Designer</span>
+                        <span class="team-name">Olga Stănescu</span>
+                    </div>
+                    <div class="team-member">
+                        <span class="team-role">Developer</span>
+                        <span class="team-name">Daniel Bahica</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 WebFlowy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const statusDiv = document.getElementById('formStatus');
+
+            statusDiv.innerHTML = `Thank you, ${name}! Your request for ${date} has been registered. The WebFlowy team will contact you shortly!`;
+            this.reset();
+        });
+    </script>
+</body>
+</html>
